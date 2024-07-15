@@ -5,8 +5,8 @@ LABEL maintainer="The Prometheus Authors <prometheus-developers@googlegroups.com
 
 ARG ARCH="amd64"
 ARG OS="linux"
-RUN make
-COPY mysqld_exporter /bin/mysqld_exporter
+RUN make build
+COPY ./mysqld_exporter /bin/mysqld_exporter
 
 EXPOSE      9104
 USER        nobody
