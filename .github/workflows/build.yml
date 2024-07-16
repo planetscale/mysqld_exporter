@@ -42,7 +42,7 @@ jobs:
         with:
           context: .
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/amd64,linux/arm64
+          #platforms: linux/amd64,linux/arm64 # TODO support ARM, too, with this and a different "driver"
           push: true
           tags: ${{ steps.meta.outputs.tags }}
 
