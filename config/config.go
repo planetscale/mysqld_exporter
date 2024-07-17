@@ -86,7 +86,7 @@ func (ch *MySqlConfigHandler) GetConfig() *Config {
 	return ch.Config
 }
 
-func (ch *MySqlConfigHandler) ReloadConfig(filename string, mysqldAddress string, mysqldUser string, tlsInsecureSkipVerify bool, logger log.Logger) error {
+func (ch *MySqlConfigHandler) ReloadConfig(filename, mysqldAddress, mysqldSocket, mysqldUser string, tlsInsecureSkipVerify bool, logger log.Logger) error {
 	var host, port string
 	defer func() {
 		if err != nil {
@@ -115,6 +115,9 @@ func (ch *MySqlConfigHandler) ReloadConfig(filename string, mysqldAddress string
 		}
 		if cfgPort := clientSection.Key("port"); cfgPort.String() == "" {
 			cfgPort.SetValue(port)
+		}
+		if cfgSocket := clientSection.Key("socket"); cfgSocket.String() == "" {
+			cfgSocket.SetValue(mysqldSocket)
 		}
 		if cfgUser := clientSection.Key("user"); cfgUser.String() == "" {
 			cfgUser.SetValue(mysqldUser)
