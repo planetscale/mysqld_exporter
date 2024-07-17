@@ -54,6 +54,10 @@ var (
 		"mysqld.address",
 		"Address to use for connecting to MySQL",
 	).Default("localhost:3306").String()
+	mysqldSocket = kingpin.Flag(
+		"mysqld.socket",
+		"Unix-domain socket to use for connecting to MySQL",
+	).String()
 	mysqldUser = kingpin.Flag(
 		"mysqld.username",
 		"Hostname to use for connecting to MySQL",
@@ -241,7 +245,7 @@ func main() {
 	level.Info(logger).Log("msg", "Build context", "build_context", version.BuildContext())
 
 	var err error
-	if err = c.ReloadConfig(*configMycnf, *mysqldAddress, *mysqldUser, *tlsInsecureSkipVerify, logger); err != nil {
+	if err = c.ReloadConfig(*configMycnf, *mysqldAddress, *mysqldSocket, *mysqldUser, *tlsInsecureSkipVerify, logger); err != nil {
 		level.Info(logger).Log("msg", "Error parsing host config", "file", *configMycnf, "err", err)
 		os.Exit(1)
 	}
@@ -284,7 +288,7 @@ func main() {
 	http.HandleFunc("/probe", handleProbe(enabledScrapers, logger))
 	http.Handle("/-/extras", extras)
 	http.HandleFunc("/-/reload", func(w http.ResponseWriter, r *http.Request) {
-		if err = c.ReloadConfig(*configMycnf, *mysqldAddress, *mysqldUser, *tlsInsecureSkipVerify, logger); err != nil {
+		if err = c.ReloadConfig(*configMycnf, *mysqldAddress, *mysqldSocket, *mysqldUser, *tlsInsecureSkipVerify, logger); err != nil {
 			level.Warn(logger).Log("msg", "Error reloading host config", "file", *configMycnf, "error", err)
 			return
 		}
