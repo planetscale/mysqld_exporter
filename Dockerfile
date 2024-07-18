@@ -7,7 +7,10 @@ RUN rm -f /mysqld_exporter/mysqld_exporter
 RUN CGO_ENABLED=0 GOOS="$TARGETOS" GOARCH="$TARGETARCH" make -C /mysqld_exporter build
 
 FROM golang:alpine
+RUN apk --no-cache add curl
+RUN apk --no-cache add jq
 COPY --from=build /mysqld_exporter/mysqld_exporter /bin/mysqld_exporter
 EXPOSE 9104
 USER nobody
+WORKDIR /
 ENTRYPOINT ["/bin/mysqld_exporter"]
