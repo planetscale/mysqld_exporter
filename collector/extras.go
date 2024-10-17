@@ -144,7 +144,6 @@ func (e *Extras) Refresh() error {
 
 	f, err := os.Open(e.filename)
 	if errors.Is(err, os.ErrNotExist) || errors.Is(err, io.EOF) {
-		level.Info(e.logger).Log("msg", "Ignoring error refreshing extras", "err", err)
 		return nil // ignore ENOENT and EOF; possibly the next refresh will go better
 	} else if err != nil {
 		return err
