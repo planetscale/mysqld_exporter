@@ -35,7 +35,9 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: type=sha
+          tags: |
+            type=raw,value=latest
+            type=sha
 
       # setup qemu and buildx for cross-builds (arm64)
       - name: Set up QEMU (for arm64 builds)
